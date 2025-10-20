@@ -58,8 +58,13 @@ userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
 
-userSchema.methods.generateAccessToken = async function(){
-    jwt.sign({
+
+// jwt.sign() is a method from the jsonwebtoken library that’s used to create (sign) a JWT — a JSON Web Token.
+// It takes your data (like user ID) and locks it with a secret key to make it tamper-proof.
+// jwt.sign(payload, secretOrPrivateKey, [options])
+
+userSchema.methods.generateAccessToken = function(){
+    return jwt.sign({
         _id: this._id,
         email: this.email,
         username: this.username,
@@ -72,8 +77,8 @@ userSchema.methods.generateAccessToken = async function(){
 )
 }
 
-userSchema.methods.generateRefreshToken = async function(){
-    jwt.sign({
+userSchema.methods.generateRefreshToken = function(){
+    return jwt.sign({
         _id: this._id
     },
     process.env.REFRESH_TOKEN_SECRET,
